@@ -10,6 +10,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.NotNull;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -30,12 +32,16 @@ public class Pedido {
     @JoinColumn(name = "produto_id", nullable = false)
     private Produto produto;
 
+    @NotNull
+    @DecimalMin(value = "0.00")
     @Column(name = "preco_registrado", nullable = false, precision = 10, scale = 2)
     private BigDecimal precoRegistrado;
 
+    @NotNull
     @Column(name = "data_registro", nullable = false)
     private LocalDateTime dataRegistro;
 
+    @NotNull
     @Column(nullable = false, length = 15)
     private String situacao = "ATIVO";
 

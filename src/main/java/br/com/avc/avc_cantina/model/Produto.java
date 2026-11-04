@@ -8,6 +8,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
@@ -24,12 +25,13 @@ public class Produto {
     private Long id;
 
     @NotBlank(message = "O nome é obrigatório")
-    @Size(max = 150)
-    @Column(nullable = false, length = 150)
+    @Size(max = 120)
+    @Column(nullable = false, length = 120)
     private String nome;
 
     @NotNull(message = "O preço é obrigatório")
     @DecimalMin(value = "0.00", message = "O preço não pode ser negativo")
+    @Digits(integer = 8, fraction = 2, message = "O preço deve ter até 8 dígitos inteiros e 2 casas decimais")
     @Column(nullable = false, precision = 10, scale = 2)
     private BigDecimal preco;
 

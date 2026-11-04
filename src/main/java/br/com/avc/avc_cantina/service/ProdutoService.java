@@ -1,6 +1,6 @@
-
 package br.com.avc.avc_cantina.service;
 
+import br.com.avc.avc_cantina.exception.RecursoNaoEncontradoException;
 import br.com.avc.avc_cantina.model.Produto;
 import br.com.avc.avc_cantina.repository.ProdutoRepository;
 import org.springframework.stereotype.Service;
@@ -25,13 +25,23 @@ public class ProdutoService {
     @Transactional(readOnly = true)
     public Produto buscarPorId(Long id) {
         return produtoRepository.findById(id)
-                .orElseThrow(() ->
-                        new IllegalArgumentException(
-                                "Produto não encontrado: " + id));
+                .orElseThrow(() -> new RecursoNaoEncontradoException("Produto não encontrado: " + id));
     }
 
     @Transactional
     public Produto cadastrar(Produto produto) {
+        produto.setNome(produto.getNome().trim());
+        return produtoRepository.save(produto);
+    }
+
+    @Transactional
+    public Produto buscarPorIdComBloqueio(Long id) {
+        return produtoRepository.buscarPorIdComBloqueio(id)
+                .orElseThrow(() -> new RecursoNaoEncontradoException("Produto não encontrado: " + id));
+    }
+
+    @Transactional
+    public Produto salvarAlteracoes(Produto produto) {
         return produtoRepository.save(produto);
     }
 }

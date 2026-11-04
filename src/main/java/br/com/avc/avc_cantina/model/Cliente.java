@@ -20,14 +20,14 @@ public class Cliente {
     private Long id;
 
     @NotBlank(message = "O nome é obrigatório")
-    @Size(max = 150)
-    @Column(nullable = false, length = 150)
+    @Size(max = 120)
+    @Column(nullable = false, length = 120)
     private String nome;
 
     @NotBlank(message = "O e-mail é obrigatório")
     @Email(message = "Informe um e-mail válido")
-    @Size(max = 255)
-    @Column(nullable = false, unique = true, length = 255)
+    @Size(max = 150)
+    @Column(nullable = false, unique = true, length = 150)
     private String email;
 
     public Cliente() {
