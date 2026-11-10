@@ -9,7 +9,7 @@ Integrantes:
    Lucas Diaz Moulaz - 5380278
    Henrique Diaz Vieira - 5384354
    Pedro Henrique Ferraresi - 5416990
-
+   Kenyi Manuel Huamani Zirena- 5242304
 
 # Sistema de Pedidos de Cantina — Tema 4
 
