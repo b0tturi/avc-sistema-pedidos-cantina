@@ -1,5 +1,6 @@
 package br.com.avc.avc_cantina;
 
+import br.com.avc.avc_cantina.exception.ConflitoException;
 import br.com.avc.avc_cantina.exception.RegraNegocioException;
 import br.com.avc.avc_cantina.model.Cliente;
 import br.com.avc.avc_cantina.model.Pedido;
@@ -64,7 +65,7 @@ class PedidoServiceTest {
         when(clienteService.buscarPorId(1L)).thenReturn(cliente);
         when(produtoService.buscarPorIdComBloqueio(1L)).thenReturn(produto);
 
-        assertThrows(RegraNegocioException.class, () -> pedidoService.cadastrar(1L, 1L));
+        assertThrows(ConflitoException.class, () -> pedidoService.cadastrar(1L, 1L));
         verify(produtoService, never()).salvarAlteracoes(any(Produto.class));
         verify(pedidoRepository, never()).save(any(Pedido.class));
     }
@@ -95,7 +96,7 @@ class PedidoServiceTest {
         pedido.setSituacao("CANCELADO");
         when(pedidoRepository.buscarPorIdComBloqueio(5L)).thenReturn(Optional.of(pedido));
 
-        assertThrows(RegraNegocioException.class, () -> pedidoService.cancelar(5L));
+        assertThrows(ConflitoException.class, () -> pedidoService.cancelar(5L));
         verify(produtoService, never()).buscarPorIdComBloqueio(any());
         verify(pedidoRepository, never()).save(any(Pedido.class));
     }
