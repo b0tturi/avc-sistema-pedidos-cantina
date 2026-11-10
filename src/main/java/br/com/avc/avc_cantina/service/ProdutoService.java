@@ -44,4 +44,12 @@ public class ProdutoService {
     public Produto salvarAlteracoes(Produto produto) {
         return produtoRepository.save(produto);
     }
+    
+    @Transactional
+    public Produto atualizar(Long id, String novoNome, java.math.BigDecimal novoPreco) {
+        Produto produto = buscarPorId(id);
+        produto.setNome(novoNome.trim());
+        produto.setPreco(novoPreco);
+        return produtoRepository.save(produto);
+    }
 }

@@ -8,6 +8,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.math.BigDecimal;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 @RestController
 @RequestMapping("/produtos")
@@ -34,4 +38,13 @@ public class ProdutoController {
     public Produto cadastrar(@Valid @RequestBody Produto produto) {
         return produtoService.cadastrar(produto);
     }
+    @PutMapping("/{id}")
+    public Produto atualizar(@PathVariable Long id, @Valid @RequestBody AtualizaProduto dados) {
+        return produtoService.atualizar(id, dados.nome(), dados.preco());
+    }
+
+    public record AtualizaProduto(
+            @NotBlank String nome,
+            @NotNull @DecimalMin("0.00") BigDecimal preco
+    ) {}
 }
