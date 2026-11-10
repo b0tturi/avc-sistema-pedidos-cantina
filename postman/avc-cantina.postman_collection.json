@@ -1,0 +1,237 @@
+﻿{
+    "info": {
+        "_postman_id": "a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d",
+        "name": "Sistema de Pedidos de Cantina - Tema 4",
+        "description": "Coleção de testes para a API da Cantina AVC, incluindo cenários oficiais e cenário próprio de validação de preço histórico.",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "item": [
+        {
+            "name": "1. Cadastrar Produto Base",
+            "event": [
+                {
+                    "listen": "test",
+                    "script": {
+                        "exec": [
+                            "pm.test(\"Status code é 200 ou 201\", function () {",
+                            "    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+                            "});",
+                            "var data = pm.response.json();",
+                            "pm.environment.set(\"produto_id\", data.id || 1);"
+                        ],
+                        "type": "text/javascript"
+                    }
+                }
+            ],
+            "request": {
+                "method": "POST",
+                "header": [
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n  \"nome\": \"Salgado Especial\",\n  \"preco\": 6.50,\n  \"estoqueDisponivel\": 5\n}"
+                },
+                "url": {
+                    "raw": "http://localhost:8080/produtos",
+                    "protocol": "http",
+                    "host": ["localhost"],
+                    "port": "8080",
+                    "path": ["produtos"]
+                }
+            }
+        },
+        {
+            "name": "2. Listar Produtos",
+            "event": [
+                {
+                    "listen": "test",
+                    "script": {
+                        "exec": [
+                            "pm.test(\"Status code é 200\", function () {",
+                            "    pm.response.to.have.status(200);",
+                            "});"
+                        ],
+                        "type": "text/javascript"
+                    }
+                }
+            ],
+            "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                    "raw": "http://localhost:8080/produtos",
+                    "protocol": "http",
+                    "host": ["localhost"],
+                    "port": "8080",
+                    "path": ["produtos"]
+                }
+            }
+        },
+        {
+            "name": "3. Criar Pedido com Preço Vigente",
+            "event": [
+                {
+                    "listen": "test",
+                    "script": {
+                        "exec": [
+                            "pm.test(\"Status code é 200 ou 201\", function () {",
+                            "    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+                            "});",
+                            "var data = pm.response.json();",
+                            "pm.environment.set(\"pedido_id\", data.id);",
+                            "pm.environment.set(\"preco_original_pedido\", data.precoRegistrado || 6.50);"
+                        ],
+                        "type": "text/javascript"
+                    }
+                }
+            ],
+            "request": {
+                "method": "POST",
+                "header": [
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n  \"clienteId\": 1,\n  \"produtoId\": 1\n}"
+                },
+                "url": {
+                    "raw": "http://localhost:8080/pedidos",
+                    "protocol": "http",
+                    "host": ["localhost"],
+                    "port": "8080",
+                    "path": ["pedidos"]
+                }
+            }
+        },
+        {
+            "name": "4. Cenário Próprio: Alterar Preço do Produto (PUT)",
+            "event": [
+                {
+                    "listen": "test",
+                    "script": {
+                        "exec": [
+                            "pm.test(\"Status code é 200 ao atualizar produto\", function () {",
+                            "    pm.response.to.have.status(200);",
+                            "});"
+                        ],
+                        "type": "text/javascript"
+                    }
+                }
+            ],
+            "request": {
+                "method": "PUT",
+                "header": [
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n  \"nome\": \"Salgado Especial\",\n  \"preco\": 12.00,\n  \"estoqueDisponivel\": 4\n}"
+                },
+                "url": {
+                    "raw": "http://localhost:8080/produtos/1",
+                    "protocol": "http",
+                    "host": ["localhost"],
+                    "port": "8080",
+                    "path": ["produtos", "1"]
+                }
+            }
+        },
+        {
+            "name": "5. Cenário Próprio: Validar Preservação do Preço Histórico",
+            "event": [
+                {
+                    "listen": "test",
+                    "script": {
+                        "exec": [
+                            "pm.test(\"Status code é 200\", function () {",
+                            "    pm.response.to.have.status(200);",
+                            "});",
+                            "pm.test(\"Preço registrado do pedido não foi alterado pelo novo preço do produto\", function () {",
+                            "    var pedidos = pm.response.json();",
+                            "    pm.expect(pedidos.length).to.be.above(0);",
+                            "    var pedidoEncontrado = pedidos[pedidos.length - 1];",
+                            "    pm.expect(Number(pedidoEncontrado.precoRegistrado)).to.not.equal(12.00);",
+                            "});"
+                        ],
+                        "type": "text/javascript"
+                    }
+                }
+            ],
+            "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                    "raw": "http://localhost:8080/pedidos",
+                    "protocol": "http",
+                    "host": ["localhost"],
+                    "port": "8080",
+                    "path": ["pedidos"]
+                }
+            }
+        },
+        {
+            "name": "6. Cancelar Pedido",
+            "event": [
+                {
+                    "listen": "test",
+                    "script": {
+                        "exec": [
+                            "pm.test(\"Status code é 200 no cancelamento\", function () {",
+                            "    pm.response.to.have.status(200);",
+                            "});"
+                        ],
+                        "type": "text/javascript"
+                    }
+                }
+            ],
+            "request": {
+                "method": "PATCH",
+                "header": [],
+                "url": {
+                    "raw": "http://localhost:8080/pedidos/1/cancelamento",
+                    "protocol": "http",
+                    "host": ["localhost"],
+                    "port": "8080",
+                    "path": ["pedidos", "1", "cancelamento"]
+                }
+            }
+        },
+        {
+            "name": "7. Bloqueio de Cancelamento Duplicado (409 Conflict)",
+            "event": [
+                {
+                    "listen": "test",
+                    "script": {
+                        "exec": [
+                            "pm.test(\"Status code é 409 Conflict para cancelamento duplicado\", function () {",
+                            "    pm.response.to.have.status(409);",
+                            "});"
+                        ],
+                        "type": "text/javascript"
+                    }
+                }
+            ],
+            "request": {
+                "method": "PATCH",
+                "header": [],
+                "url": {
+                    "raw": "http://localhost:8080/pedidos/1/cancelamento",
+                    "protocol": "http",
+                    "host": ["localhost"],
+                    "port": "8080",
+                    "path": ["pedidos", "1", "cancelamento"]
+                }
+            }
+        }
+    ]
+}
