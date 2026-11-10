@@ -3,8 +3,6 @@ package br.com.avc.avc_cantina.controller;
 
 import br.com.avc.avc_cantina.model.Cliente;
 import br.com.avc.avc_cantina.service.ClienteService;
-import jakarta.validation.Valid;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -29,9 +27,5 @@ public class ClienteController {
         return clienteService.buscarPorId(id);
     }
 
-    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public Cliente cadastrar(@Valid @RequestBody Cliente cliente) {
-        return clienteService.cadastrar(cliente);
-    }
+    
 }

@@ -30,14 +30,5 @@ public class ClienteService {
                 .orElseThrow(() -> new RecursoNaoEncontradoException("Cliente não encontrado: " + id));
     }
 
-    @Transactional
-    public Cliente cadastrar(Cliente cliente) {
-        String emailNormalizado = cliente.getEmail().trim().toLowerCase(Locale.ROOT);
-        if (clienteRepository.existsByEmailIgnoreCase(emailNormalizado)) {
-            throw new ConflitoException("Já existe um cliente cadastrado com este e-mail.");
-        }
-        cliente.setNome(cliente.getNome().trim());
-        cliente.setEmail(emailNormalizado);
-        return clienteRepository.save(cliente);
-    }
+    
 }
