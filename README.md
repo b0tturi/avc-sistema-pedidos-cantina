@@ -1,3 +1,16 @@
+Integrantes:
+Júlio César Gualter de Lima RA: 5487153 
+Erick Hilquias Botturi Negrão RA: 5476739
+Eric Varjão Mello RA: 5495202 
+Vinicius Loureiro RA: 5487021 
+Vinicius Augusto RA: 5515190 
+Henrique Tadeu Fazio Campos Maraco RA: 5552141
+Lucas Diaz Moulaz - 5380278
+Lucas Diaz Moulaz - 5380278
+Henrique Diaz Vieira - 5384354
+Pedro Henrique Ferraresi - 5416990
+
+
 # Sistema de Pedidos de Cantina — Tema 4
 
 API REST desenvolvida em **Java 21**, **Spring Boot**, **Spring Data JPA** e **PostgreSQL**, como parte do projeto acadêmico Tema 4 — Sistema de Pedidos de Cantina.
