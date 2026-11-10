@@ -1,12 +1,6 @@
 
 package br.com.avc.avc_cantina.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.NotBlank;
@@ -16,28 +10,21 @@ import jakarta.validation.constraints.Size;
 
 import java.math.BigDecimal;
 
-@Entity
-@Table(name = "produtos")
 public class Produto {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @NotBlank(message = "O nome é obrigatório")
     @Size(max = 120)
-    @Column(nullable = false, length = 120)
     private String nome;
 
     @NotNull(message = "O preço é obrigatório")
     @DecimalMin(value = "0.00", message = "O preço não pode ser negativo")
     @Digits(integer = 8, fraction = 2, message = "O preço deve ter até 8 dígitos inteiros e 2 casas decimais")
-    @Column(nullable = false, precision = 10, scale = 2)
     private BigDecimal preco;
 
     @NotNull(message = "O estoque é obrigatório")
     @PositiveOrZero(message = "O estoque não pode ser negativo")
-    @Column(name = "estoque_disponivel", nullable = false)
     private Integer estoqueDisponivel;
 
     public Produto() {

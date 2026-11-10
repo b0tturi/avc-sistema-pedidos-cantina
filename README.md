@@ -3,13 +3,12 @@ Integrantes:
    Erick Hilquias Botturi Negrão RA: 5476739
    Eric Varjão Mello RA: 5495202 
    Vinicius Loureiro RA: 5487021 
-   Vinicius Augusto RA: 5515190 
+   Vinicius Augusto Meneses Macena RA: 5515190 
    Henrique Tadeu Fazio Campos Maraco RA: 5552141
-   Lucas Diaz Moulaz - 5380278
-   Lucas Diaz Moulaz - 5380278
-   Henrique Diaz Vieira - 5384354
-   Pedro Henrique Ferraresi - 5416990
-   Kenyi Manuel Huamani Zirena- 5242304
+   Lucas Diaz Moulaz RA: 5380278
+   Henrique Diaz Vieira RA: 5384354
+   Pedro Henrique Ferraresi RA: 5416990
+   Kenyi Manuel Huamani Zirena RA: 5242304
 
 # Sistema de Pedidos de Cantina — Tema 4
 

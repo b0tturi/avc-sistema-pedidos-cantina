@@ -47,16 +47,21 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<Map<String, Object>> tratarCorpoInvalido(HttpMessageNotReadableException ex) {
-        return resposta(HttpStatus.BAD_REQUEST, "Corpo da requisição inválido ou malformado.");
+        return resposta(HttpStatus.BAD_REQUEST, "Corpo da requisicao invalido ou malformado.");
     }
 
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<Map<String, Object>> tratarIntegridade(DataIntegrityViolationException ex) {
-        return resposta(HttpStatus.CONFLICT, "A operação viola uma restrição do banco de dados.");
+        return resposta(HttpStatus.CONFLICT, "A operacao viola uma restricao do banco de dados.");
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<Map<String, Object>> tratarErroGenerico(Exception ex) {
+        return resposta(HttpStatus.INTERNAL_SERVER_ERROR, "Ocorreu um erro interno ao processar a operacao.");
     }
 
     private ResponseEntity<Map<String, Object>> resposta(HttpStatus status, String mensagem) {
-        Map<String, Object> corpo = new LinkedHashMap<>();
+        Map<String, Object> corpo = new LinkedHashMap();
         corpo.put("timestamp", LocalDateTime.now());
         corpo.put("status", status.value());
         corpo.put("erro", status.getReasonPhrase());

@@ -1,33 +1,21 @@
 
 package br.com.avc.avc_cantina.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
-@Entity
-@Table(name = "clientes")
 public class Cliente {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @NotBlank(message = "O nome é obrigatório")
     @Size(max = 120)
-    @Column(nullable = false, length = 120)
     private String nome;
 
     @NotBlank(message = "O e-mail é obrigatório")
     @Email(message = "Informe um e-mail válido")
     @Size(max = 150)
-    @Column(nullable = false, unique = true, length = 150)
     private String email;
 
     public Cliente() {
