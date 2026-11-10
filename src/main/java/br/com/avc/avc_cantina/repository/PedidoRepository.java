@@ -13,6 +13,7 @@ import java.util.Optional;
 public interface PedidoRepository extends JpaRepository<Pedido, Long> {
 
     List<Pedido> findBySituacao(String situacao);
+    boolean existsByProdutoId(Long produtoId);
 
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     @Query("select p from Pedido p where p.id = :id")

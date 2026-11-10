@@ -46,5 +46,11 @@ public class ProdutoController {
     public record AtualizaProduto(
             @NotBlank String nome,
             @NotNull @DecimalMin("0.00") BigDecimal preco
-    ) {}
+    )  {}
+    
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void excluir(@PathVariable Long id) {
+        produtoService.excluir(id);
+    }
 }

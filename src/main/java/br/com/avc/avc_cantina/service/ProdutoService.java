@@ -1,6 +1,8 @@
 package br.com.avc.avc_cantina.service;
 
 import br.com.avc.avc_cantina.exception.RecursoNaoEncontradoException;
+import br.com.avc.avc_cantina.exception.ConflitoException;
+import br.com.avc.avc_cantina.repository.PedidoRepository;
 import br.com.avc.avc_cantina.model.Produto;
 import br.com.avc.avc_cantina.repository.ProdutoRepository;
 import org.springframework.stereotype.Service;
@@ -12,9 +14,11 @@ import java.util.List;
 public class ProdutoService {
 
     private final ProdutoRepository produtoRepository;
+    private final PedidoRepository pedidoRepository;
 
-    public ProdutoService(ProdutoRepository produtoRepository) {
+    public ProdutoService(ProdutoRepository produtoRepository, PedidoRepository pedidoRepository) {
         this.produtoRepository = produtoRepository;
+        this.pedidoRepository = pedidoRepository;
     }
 
     @Transactional(readOnly = true)
@@ -44,7 +48,7 @@ public class ProdutoService {
     public Produto salvarAlteracoes(Produto produto) {
         return produtoRepository.save(produto);
     }
-    
+
     @Transactional
     public Produto atualizar(Long id, String novoNome, java.math.BigDecimal novoPreco) {
         Produto produto = buscarPorId(id);
@@ -52,4 +56,14 @@ public class ProdutoService {
         produto.setPreco(novoPreco);
         return produtoRepository.save(produto);
     }
+    @Transactional
+public void excluir(Long id) {
+    buscarPorId(id); // Garante o 404 se o produto não existir
+
+    if (pedidoRepository.existsByProdutoId(id)) {
+        throw new ConflitoException("Não é possível excluir o produto pois ele possui histórico de pedidos.");
+    }
+
+    produtoRepository.deleteById(id);
+}
 }
