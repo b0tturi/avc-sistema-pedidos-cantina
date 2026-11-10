@@ -1,5 +1,6 @@
 package br.com.avc.avc_cantina.service;
 
+import br.com.avc.avc_cantina.exception.ConflitoException;
 import br.com.avc.avc_cantina.exception.RecursoNaoEncontradoException;
 import br.com.avc.avc_cantina.exception.RegraNegocioException;
 import br.com.avc.avc_cantina.model.Cliente;
@@ -48,14 +49,14 @@ public class PedidoService {
     @Transactional
     public Pedido cadastrar(Long clienteId, Long produtoId) {
         if (clienteId == null || clienteId <= 0 || produtoId == null || produtoId <= 0) {
-            throw new RegraNegocioException("Informe identificadores válidos para cliente e produto.");
+            throw new RegraNegocioException("Identificador de cliente e produto são obrigatórios.");
         }
 
         Cliente cliente = clienteService.buscarPorId(clienteId);
         Produto produto = produtoService.buscarPorIdComBloqueio(produtoId);
 
         if (produto.getEstoqueDisponivel() <= 0) {
-            throw new RegraNegocioException("Produto sem estoque disponível.");
+            throw new ConflitoException("Produto sem estoque disponível.");
         }
 
         produto.setEstoqueDisponivel(produto.getEstoqueDisponivel() - 1);
@@ -77,7 +78,7 @@ public class PedidoService {
                 .orElseThrow(() -> new RecursoNaoEncontradoException("Pedido não encontrado: " + pedidoId));
 
         if (CANCELADO.equals(pedido.getSituacao())) {
-            throw new RegraNegocioException("Este pedido já foi cancelado.");
+            throw new ConflitoException("Pedido já se encontra cancelado.");
         }
 
         Produto produto = produtoService.buscarPorIdComBloqueio(pedido.getProduto().getId());
