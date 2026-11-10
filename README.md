@@ -119,3 +119,29 @@ Caso o front-end seja executado em outro endereço, ajuste as configurações de
 Durante o desenvolvimento deste projeto, foram utilizadas ferramentas de inteligência artificial como apoio à implementação, revisão e correção de código, organização da documentação e resolução de problemas técnicos.
 
 O uso dessas ferramentas ocorreu como recurso auxiliar ao processo de desenvolvimento e aprendizagem, não substituindo a análise, os testes e a validação do projeto.
+
+## Decisões Técnicas Essenciais
+
+- **JDBC puro com `DataSourceUtils`:** A migração de JPA/Hibernate para JDBC puro exigiu manter o controle transacional do Spring (`@Transactional`). O uso de `DataSourceUtils.getConnection(dataSource)` recupera a mesma conexão física já vinculada à transação da thread em execução. Isso garante operações atômicas (commit/rollback automáticos gerenciados pelo Spring) e evita vazamento de conexões (*connection leaks*).
+- **Bloqueio Pessimista (`FOR UPDATE`):** Para o controle de estoque concorrente, a verificação e decremento do produto utilizam a cláusula SQL `SELECT ... FOR UPDATE`. Ela aplica um lock exclusivo na linha do registro no PostgreSQL até o encerramento da transação, prevenindo condições de corrida (*race conditions*) caso requisições paralelas comprem a última unidade ao mesmo tempo.
+- **HTTP 409 (Conflict) para Falta de Estoque e Cancelamento Duplicado:** Comprar um produto com estoque zerado ou tentar cancelar um pedido que já está cancelado constitui uma violação de estado atual do recurso no servidor, e não um erro de sintaxe/formatação da requisição (400 Bad Request) nem falha de infraestrutura (500). O status `409 Conflict` comunica formalmente essa incompatibilidade com o estado do banco.
+
+---
+
+## Análise de Algoritmos (Busca e Ordenação)
+
+- **Busca Linear — $O(n)$:** Examina os elementos sequencialmente até encontrar a chave ou percorrer toda a lista. Sua complexidade no pior caso é linear, $O(n)$. É ideal para coleções pequenas ou não ordenadas, onde o custo de ordenar previamente não compensa.
+- **Busca Binária — $O(\log n)$:** Reduz a área de pesquisa pela metade a cada passo, apresentando complexidade logarítmica, $O(\log n)$. Requer **obrigatoriamente** que a coleção esteja previamente ordenada pela mesma chave utilizada na busca (neste projeto, o atributo identificador `id`).
+- **Algoritmo de Ordenação Escolhido (Timsort):**
+  - Implementação nativa do Java via `Collections.sort()` / `List.sort()`.
+  - **Complexidade:** $O(n)$ no melhor caso (dados já ordenados) e $O(n \log n)$ no caso médio e pior caso.
+  - **Justificativa:** É um algoritmo híbrido (Merge Sort + Insertion Sort), estável e de alta performance na memória para garantir a pré-condição exigida pela Busca Binária.
+
+---
+
+## Evidências de Testes
+
+Os testes automatizados foram executados via Gradle Wrapper:
+
+```powershell
+.\gradlew.bat test
